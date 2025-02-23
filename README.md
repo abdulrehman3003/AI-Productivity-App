@@ -44,8 +44,8 @@ This project, **Error404**, is an AI-powered productivity assistant designed to 
 ## 🛠️ How to Initialize the Project
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/your-repo.git
-   cd your-repo
+   git clone https://github.com/abdulrehman3003/AI-Productivity-App/
+   cd AI-Productivity-App
    ```
 2. **Install Dependencies**:
    ```bash
