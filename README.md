@@ -80,4 +80,4 @@ This project is licensed under the MIT License. See the `LICENSE` file for more 
 Contributions are welcome! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) file for details on how to get started.
 
 ## 📧 Contact
-For any inquiries, please contact [your email] or open an issue in the repository. 
+For any inquiries, please contact abdul_rehman2006@outlook.com or open an issue in the repository. 
