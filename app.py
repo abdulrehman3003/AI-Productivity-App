@@ -67,22 +67,7 @@ st.markdown("""
         gap: 2rem;
     }
     
-    .logo {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #E2E2E2;
-        text-decoration: none;
-    }
-    
-    .logo img {
-        height: 32px;
-        width: 32px;
-        border-radius: 6px;
-    }
-    
+
     .nav-links {
         display: flex;
         gap: 1rem;
@@ -196,36 +181,8 @@ st.markdown("""
         });
     </script>
     
-    <div class="header">
-        <div class="nav-container">
-            <div class="logo">
-                <img src="logo2.png" alt="Logo">
-                <span>Error404</span>
-            </div>
-            <div class="nav-links">
-                <button class="nav-button {'active' if st.session_state.current_page == 'Tasks' else ''}" 
-                        onclick="window.location.search = '?page=Tasks'">📋 Tasks</button>
-                <button class="nav-button {'active' if st.session_state.current_page == 'Projects' else ''}" 
-                        onclick="window.location.search = '?page=Projects'">📊 Projects</button>
-                <button class="nav-button {'active' if st.session_state.current_page == 'Analytics' else ''}" 
-                        onclick="window.location.search = '?page=Analytics'">📈 Analytics</button>
-                <button class="nav-button {'active' if st.session_state.current_page == 'Analysis' else ''}" 
-                        onclick="window.location.search = '?page=Analysis'">🔍 Analysis</button>
-                <button class="nav-button {'active' if st.session_state.current_page == 'Reminders' else ''}" 
-                        onclick="window.location.search = '?page=Reminders'">⏰ Reminders</button>
-                <button class="nav-button {'active' if st.session_state.current_page == 'Urgent' else ''}" 
-                        onclick="window.location.search = '?page=Urgent'">🚨 Urgent</button>
-                <button class="nav-button {'active' if st.session_state.current_page == 'Meeting' else ''}" 
-                        onclick="window.location.search = '?page=Meeting'">👥 Meeting</button>
-                <button class="nav-button {'active' if st.session_state.current_page == 'Review' else ''}" 
-                        onclick="window.location.search = '?page=Review'">📝 Review</button>
-            </div>
-        </div>
-        <div class="right-nav">
-            <input type="text" placeholder="Search..." class="search-box">
-            <div style="color: #A0A0A0; cursor: pointer;">👤</div>
-        </div>
-    </div>
+
+  
     
     <div class="content">
     """, unsafe_allow_html=True)
@@ -668,9 +625,14 @@ def main():
     # Get all tasks at the beginning
     tasks = task_manager.get_tasks()
     
-    # Load and display logo
-    logo_path = os.path.join(current_dir, 'logo2.png')
-    st.image(logo_path, width=32)  # This makes the logo available to the page
+    # Display centered name without logo
+    col1, col2, col3 = st.columns([3, 6, 3])  # Create three columns for centering
+    with col2:  # Use the middle column
+        st.markdown("""
+            <div style="text-align: center;">
+                <h2 style="margin: 0; color: #E2E2E2;">Error404</h2>
+            </div>
+        """, unsafe_allow_html=True)
 
     # Custom CSS for the navigation bar
     st.markdown(f"""
