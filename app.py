@@ -717,10 +717,10 @@ def main():
     # Navigation tabs
     tabs = {
         "📋 Tasks": "Tasks",
-        "📊 Projects": "Project",
-        "📈 Task Analysis": "Productivity Insights",
-        "🔍 Analysis": "Task Analysis",
+        "📈 Insights": "Productivity Insights",
+        "🔍 Task Analysis": "Task Analysis",
         "⏰ Reminders": "Reminders",
+        "📊 Projects": "Project",
         "🚨 Urgent": "Urgent",
         "👥 Meeting": "Meeting",
         "📝 Review": "Review"
