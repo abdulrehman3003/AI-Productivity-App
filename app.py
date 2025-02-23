@@ -234,14 +234,25 @@ def task_list(task_manager, tasks):
             """, unsafe_allow_html=True)
             
             # Quick actions
-            col1, col2, col3 = st.columns([1,1,2])
+            col1, col2, col3, col4 = st.columns([1,1,1,2])
             with col1:
                 new_status = st.selectbox("Update Status",
                                        ["Pending", "In Progress", "Completed"],
                                        key=f"status_{task['id']}")
             with col2:
                 if st.button("Update", key=f"update_{task['id']}"):
-                    task_manager.update_task_status(task['id'], new_status)
+                    if new_status is not None:
+                        task_manager.update_task_status(task['id'], new_status)
+                        st.rerun()
+                    else:
+                        st.error("Please select a status")
+            with col3:
+                if st.button("✏️ Edit", key=f"edit_{task['id']}"):
+                    st.session_state.editing_task = task
+            with col4:
+                if st.button("🗑️ Delete", key=f"delete_{task['id']}"):
+                    task_manager.delete_task(task['id'])
+                    st.success("Task deleted successfully!")
                     st.rerun()
 
     # Cleanup completed tasks button
@@ -281,6 +292,59 @@ def add_task_modal(task_manager):
                 st.rerun()
             else:
                 st.error("Title is required")
+
+def edit_task_modal(task_manager):
+    if 'editing_task' not in st.session_state:
+        return
+        
+    task = st.session_state.editing_task
+    with st.form("edit_task_form"):
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            title = st.text_input("Task Title*", value=task['title'])
+            description = st.text_area("Description", value=task.get('description', ''))
+            category = st.selectbox("Category", 
+                                  ["Work", "Personal", "Study", "Health", "Uncategorized"],
+                                  index=["Work", "Personal", "Study", "Health", "Uncategorized"].index(
+                                      task.get('category', 'Uncategorized')))
+        
+        with col2:
+            priority = st.selectbox("Priority*", 
+                                  ["High", "Medium", "Low"],
+                                  index=["High", "Medium", "Low"].index(
+                                      task.get('priority', 'Medium')))
+            labels = st.multiselect("Labels", 
+                                  ["Urgent", "Meeting", "Project", "Review"],
+                                  default=task.get('labels', '').split(',') if task.get('labels') else [])
+            deadline = st.date_input("Deadline", 
+                                   value=datetime.strptime(task['deadline'], '%Y-%m-%d').date() if task.get('deadline') else None)
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.form_submit_button("Save Changes"):
+                if title:
+                    success = task_manager.update_task(
+                        task_id=task['id'],
+                        title=title,
+                        description=description,
+                        priority=priority,
+                        category=category,
+                        labels=",".join(labels) if labels else "Uncategorized",
+                        deadline=str(deadline) if deadline else None
+                    )
+                    if success:
+                        st.success("Task updated successfully!")
+                        del st.session_state.editing_task
+                        st.rerun()
+                    else:
+                        st.error("Failed to update task. Please try again.")
+                else:
+                    st.error("Title is required")
+        with col2:
+            if st.form_submit_button("Cancel"):
+                del st.session_state.editing_task
+                st.rerun()
 
 def show_productivity_insights(task_manager):
     st.title("📊 Productivity Insights")
@@ -726,8 +790,9 @@ def main():
         "📝 Review": "Review"
     }
     
-    page = st.radio("Navigation", list(tabs.keys()), horizontal=True, key="nav", label_visibility="collapsed")
-    selected_page = tabs[page]
+    page = st.radio("Navigation", list(tabs.keys()), horizontal=True, 
+                    key="nav", label_visibility="collapsed")
+    selected_page = tabs[page] if page is not None else "Tasks"  # Add default value
     
     st.markdown('</div></div></div>', unsafe_allow_html=True)
 
@@ -741,6 +806,9 @@ def main():
         
         if st.session_state.get('show_modal', False):
             add_task_modal(task_manager)
+            
+        if 'editing_task' in st.session_state:
+            edit_task_modal(task_manager)
         
         # Filter tasks based on labels
         all_labels = set()
