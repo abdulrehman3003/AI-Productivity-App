@@ -718,7 +718,7 @@ def main():
     tabs = {
         "📋 Tasks": "Tasks",
         "📊 Projects": "Project",
-        "📈 Analytics": "Productivity Insights",
+        "📈 Task Analysis": "Productivity Insights",
         "🔍 Analysis": "Task Analysis",
         "⏰ Reminders": "Reminders",
         "🚨 Urgent": "Urgent",
